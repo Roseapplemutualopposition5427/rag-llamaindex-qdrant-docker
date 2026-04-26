@@ -400,4 +400,4 @@ This licence applies to /README.md and /docs/ only. Source code in /scripts/
 and /docker/ is licensed under MIT (see LICENSE-CODE).
 
 Attribution: Alec Silva Couto, 2026.
-Canonical source: https://github.com/<your-handle>/rag-llamaindex-qdrant-docker
+Canonical source: https://github.com/bluedepin/rag-llamaindex-qdrant-docker

@@ -130,4 +130,4 @@ Out of scope but straightforward to add: `.docx`, `.html`, `.json`, `.csv`. To a
 
 ---
 
-Still stuck? Open an issue at https://github.com/<your-handle>/rag-llamaindex-qdrant-docker/issues
+Still stuck? Open an issue at https://github.com/bluedepin/rag-llamaindex-qdrant-docker/issues

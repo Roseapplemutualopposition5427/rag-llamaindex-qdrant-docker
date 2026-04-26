@@ -550,7 +550,7 @@ Both extensions build directly on the Docker and LlamaIndex patterns from this p
 - **Plain-text API key? Fix it → [Add Infisical for Secret Management](POST_2_URL)**
 - **Want agents to query this RAG directly? → [Add an MCP Server to Your RAG](POST_3_URL)**
 
-If you want a complete reference implementation with these exact files, see [github.com/\<your-handle\>/rag-llamaindex-qdrant-docker](https://github.com/<your-handle>/rag-llamaindex-qdrant-docker). The repo mirrors this post step for step.
+If you want a complete reference implementation with these exact files, see [github.com/\<your-handle\>/rag-llamaindex-qdrant-docker](https://github.com/bluedepin/rag-llamaindex-qdrant-docker). The repo mirrors this post step for step.
 
 ## Licence and credits
 

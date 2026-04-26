@@ -3,3 +3,5 @@ theme: jekyll-theme-cayman
 google_analytics: G-8VM391J4V2
 title: Build a RAG System with LlamaIndex and Qdrant in Docker
 description: Beginner-friendly tutorial — every file shown inline, runnable by humans or AI agents.
+plugins:
+  - jekyll-sitemap

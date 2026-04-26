@@ -76,10 +76,11 @@ Run the ingest script as a one-shot container using the `manual` Docker Compose 
 
 Action:
 ```bash
-docker compose -f docker/docker-compose.yml --profile manual run --rm ingest python /app/scripts/ingest.py
+docker compose -f docker/docker-compose.yml --profile manual run --rm ingest python /app/scripts/ingest.py 2>&1 | tee /tmp/ingest.log
 ```
 
-Verify: stdout ends with `[ingest] Done.` and `curl -s http://127.0.0.1:6333/collections` lists the collection name.
+Verify: `grep -q '\[ingest\] Done\.' /tmp/ingest.log`
+Verify: `curl -s http://127.0.0.1:6333/collections | grep -q '"result"'`
 
 ## Task 5: Query
 
@@ -94,14 +95,14 @@ Verify: stdout contains `Sources:` and at least one source line shows a score >=
 
 ## Task 6: Schedule daily sync (optional)
 
-Configure a cron job to run `sync-rag.sh` daily. The script invokes `ingest.py --sync` in incremental mode: new files are embedded and added, deleted files are removed from Qdrant, unchanged documents are skipped. Use `pwd` inside the repo directory to get the absolute path before adding the cron entry.
+Configure a cron job to run `sync-rag.sh` daily. The script invokes `ingest.py --sync` in incremental mode: new files are embedded and added, deleted files are removed from Qdrant, unchanged documents are skipped. Resolve the repo path at runtime so the cron entry is portable.
 
 Action:
 ```bash
-(crontab -l 2>/dev/null; echo "0 3 * * * /absolute/path/to/rag-llamaindex-qdrant-docker/scripts/sync-rag.sh >> /var/log/rag-sync.log 2>&1") | crontab -
+REPO=$(pwd) && (crontab -l 2>/dev/null; echo "0 3 * * * $REPO/scripts/sync-rag.sh >> /var/log/rag-sync.log 2>&1") | crontab -
 ```
 
-Verify: crontab -l | grep sync-rag.sh
+Verify: `crontab -l | grep -q sync-rag.sh`
 
 ## Failure modes
 

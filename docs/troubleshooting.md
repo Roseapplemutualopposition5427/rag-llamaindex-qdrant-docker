@@ -49,7 +49,7 @@ For most Apple Silicon setups, adding `start_period: 30s` alone resolves the iss
 
 Processing PDFs that contain MathML or complex mathematical symbols can produce `UnicodeEncodeError: 'utf-8' codec can't encode character '\ud835'`. This error is caused by lone surrogate code points in the extracted text — values in the range `U+D800` to `U+DFFF` that are invalid in UTF-8.
 
-The ingest script handles this via `scripts/_sanitize.py`. The canonical clean operation strips surrogates by round-tripping through UTF-8 with the `ignore` error handler:
+The ingest script applies a sanitisation pass before chunking. The canonical clean operation strips surrogates by round-tripping through UTF-8 with the `ignore` error handler:
 
 ```python
 clean_text = original_text.encode('utf-8', errors='ignore').decode('utf-8')

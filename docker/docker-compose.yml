@@ -1,0 +1,30 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    container_name: rag-qdrant
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - ../qdrant-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  ingest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-ingest
+    env_file:
+      - ../.env
+    volumes:
+      - ../documents:/app/documents:ro
+      - ../scripts:/app/scripts:ro
+      - ../collections.yaml:/app/collections.yaml:ro
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    profiles: ["manual"]

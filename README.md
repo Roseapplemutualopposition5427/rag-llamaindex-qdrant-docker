@@ -553,6 +553,10 @@ Both extensions build directly on the Docker and LlamaIndex patterns from this p
 
 If you want a complete reference implementation with these exact files, see [github.com/\<your-handle\>/rag-llamaindex-qdrant-docker](https://github.com/bluedepin/rag-llamaindex-qdrant-docker). The repo mirrors this post step for step.
 
+## Repo activity
+
+![Repobeats analytics image](https://repobeats.axiom.co/api/embed/aa1ae7e05362948a7b614c9b461d7f88fa6e1e9e.svg "Repobeats analytics image")
+
 ## Licence and credits
 
 The code in this tutorial is released under the MIT License (see `LICENSE-CODE`). The prose and instructional content are licensed under Creative Commons Attribution 4.0 International (see `LICENSE-PROSE`). Authored by Alec Silva Couto, 2026. Contributions and corrections welcome via the repository linked above.

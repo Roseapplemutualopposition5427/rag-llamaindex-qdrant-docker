@@ -139,7 +139,9 @@ Starting the Qdrant service initializes a persistent vector database inside a Do
 
 Launch Qdrant in the background with Docker Compose:
 
-`docker compose -f docker/docker-compose.yml up -d qdrant`
+```bash
+docker compose -f docker/docker-compose.yml up -d qdrant
+```
 
 A vector database is fundamentally different from a standard SQL or key-value store. Traditional databases find exact matches — they cannot answer "find me chunks that mean the same thing as my question." Qdrant stores each document chunk as a mathematical vector and uses cosine similarity to measure the angle between two vectors. A small angle means high semantic similarity. This approach works at scale: Qdrant can search millions of vectors in milliseconds because it uses approximate nearest-neighbour (ANN) indexing rather than scanning every row.
 
@@ -179,7 +181,11 @@ The ingestion process converts raw files from the `documents/` directory into hi
 
 Run the ingest script using Docker Compose:
 
-`docker compose -f docker/docker-compose.yml run --rm ingest python /app/scripts/ingest.py`
+```bash
+docker compose -f docker/docker-compose.yml --profile manual run --rm ingest python /app/scripts/ingest.py
+```
+
+The `ingest` service is declared with `profiles: ["manual"]` in `docker-compose.yml`, which keeps it out of the auto-start path of `docker compose up`. The `--profile manual` flag activates it for one-shot runs.
 
 The script reads every collection from `collections.yaml`, loads the matching folder under `documents/`, and works through the following pipeline steps for each file: extract text, strip surrogate characters that can cause encoding failures, split the text into overlapping chunks based on `chunk_size` and `chunk_overlap`, send each chunk to your embedding provider, and store the resulting vectors in Qdrant.
 
@@ -210,7 +216,9 @@ Querying the RAG system sends a natural language question through LlamaIndex to 
 
 Pass the collection name and your question as arguments:
 
-`docker compose -f docker/docker-compose.yml run --rm ingest python /app/scripts/query.py research_papers "What are the main findings on transformer attention mechanisms?"`
+```bash
+docker compose -f docker/docker-compose.yml --profile manual run --rm ingest python /app/scripts/query.py research_papers "What are the main findings on transformer attention mechanisms?"
+```
 
 Sample output:
 
@@ -234,7 +242,9 @@ The scores represent cosine similarity on a 0-to-1 scale. A score of 1.0 is a ma
 
 To query a different collection, replace the first argument. To query your notes instead of research papers:
 
-`docker compose -f docker/docker-compose.yml run --rm ingest python /app/scripts/query.py notes "What was the main idea from last week's planning session?"`
+```bash
+docker compose -f docker/docker-compose.yml --profile manual run --rm ingest python /app/scripts/query.py notes "What was the main idea from last week's planning session?"
+```
 
 **Verify:** the output includes at least one source citation with a score >= 0.5.
 
@@ -256,7 +266,7 @@ Add this line, replacing `/absolute/path/to/` with the actual absolute path to t
 0 3 * * * /absolute/path/to/rag-llamaindex-qdrant-docker/scripts/sync-rag.sh >> /var/log/rag-sync.log 2>&1
 ```
 
-The wrapper script `sync-rag.sh` invokes `docker compose run --rm ingest python /app/scripts/ingest.py --sync` internally and resolves the path to the `docker` binary at runtime. Cron does not inherit your shell `PATH`, so the wrapper handles that detail in one place. The `>> /var/log/rag-sync.log 2>&1` suffix appends both standard output and errors to a log file for later inspection. Find the absolute path with `pwd` from inside the repo directory.
+The wrapper script `sync-rag.sh` invokes `docker compose --profile manual run --rm ingest python /app/scripts/ingest.py --sync` internally, activates the manual profile so the one-shot ingest service runs, and resolves the path to the `docker` binary at runtime. Cron does not inherit your shell `PATH`, so the wrapper handles that detail in one place. The `>> /var/log/rag-sync.log 2>&1` suffix appends both standard output and errors to a log file for later inspection. Find the absolute path with `pwd` from inside the repo directory.
 
 After saving, verify the entry was accepted:
 
@@ -268,7 +278,7 @@ Resolving common errors in a LlamaIndex and Qdrant pipeline requires checking co
 
 ### Qdrant collection not found error fix
 
-The ingest script has not run yet, or the folder name in `documents/` does not match the `name:` field in `collections.yaml`. Run `docker compose -f docker/docker-compose.yml run --rm ingest python /app/scripts/ingest.py` to create the collection and populate it with vectors.
+The ingest script has not run yet, or the folder name in `documents/` does not match the `name:` field in `collections.yaml`. Run the ingest command from Step 4 to create the collection and populate it with vectors.
 
 ### OpenAI rate limit during ingest
 

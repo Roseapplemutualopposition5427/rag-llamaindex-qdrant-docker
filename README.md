@@ -84,15 +84,17 @@ The configuration phase involves cloning the repository and populating the envir
 
 Clone the repository and enter the project directory:
 
-`git clone https://github.com/<your-handle>/rag-llamaindex-qdrant-docker.git`
-
-`cd rag-llamaindex-qdrant-docker`
+```bash
+git clone https://github.com/<your-handle>/rag-llamaindex-qdrant-docker.git
+cd rag-llamaindex-qdrant-docker
+```
 
 Copy the template files to create your local configuration:
 
-`cp .env.example .env`
-
-`cp collections.yaml.example collections.yaml`
+```bash
+cp .env.example .env
+cp collections.yaml.example collections.yaml
+```
 
 Open `.env` in a text editor and fill in your provider credentials. Both blocks are pre-written in the example — uncomment one and leave the other commented out:
 
@@ -106,7 +108,12 @@ OPENAI_LLM_MODEL=gpt-4o-mini
 # OLLAMA_HOST=http://host.docker.internal:11434
 # OLLAMA_EMBED_MODEL=bge-m3
 # OLLAMA_LLM_MODEL=llama3.2:3b
+
+# --- Qdrant (always required) ---
+QDRANT_URL=http://qdrant:6333
 ```
+
+`QDRANT_URL` defaults to the Docker service name `qdrant`, which resolves automatically inside the Compose network. If you ever run the scripts on the host (outside Docker), change this to `http://localhost:6333`.
 
 Now open `collections.yaml`. Each entry creates one Qdrant collection and maps to one folder under `documents/`. The `chunk_size` and `chunk_overlap` values are measured in tokens:
 
@@ -124,7 +131,7 @@ collections:
 
 Larger chunks preserve more context per result but increase embedding cost slightly. Smaller chunks give more precise citations. The default values above are a solid starting point for most use cases.
 
-**Verify:** run `cat .env` and confirm at least one provider block is uncommented.
+**Verify:** `grep -E '^(OPENAI_API_KEY|OLLAMA_HOST)=' .env` returns one line — the active provider.
 
 ## Step 2 — Start Qdrant
 
@@ -138,7 +145,7 @@ A vector database is fundamentally different from a standard SQL or key-value st
 
 The `qdrant-data/` directory at the repo root is the persistence layer. All your collections, vectors, and metadata live there. Docker writes to it via the bind mount defined in `docker-compose.yml`. You can stop the container, update the image, or reboot without losing your indexed documents.
 
-The healthcheck in `docker-compose.yml` polls port 6333 every five seconds. The `ingest` service declares `depends_on: qdrant: condition: service_healthy`, so the ingest container will not start until Qdrant confirms it is ready.
+The healthcheck in `docker-compose.yml` opens a TCP connection to port 6333 every five seconds (the Qdrant image does not ship `curl`, so a bash `/dev/tcp/` probe is used instead of an HTTP GET). The `ingest` service declares `depends_on: qdrant: condition: service_healthy`, so the ingest container will not start until Qdrant confirms it is ready.
 
 **Verify:** `curl http://127.0.0.1:6333/` — expected response is JSON containing `{"title":"qdrant","version":"..."}`.
 
@@ -219,8 +226,8 @@ parallelism absent in recurrent architectures.
 
 Sources:
   [1] attention_is_all_you_need.pdf, page 4  (score: 0.87)
-  [2] bert_paper.pdf, page 2               (score: 0.81)
-  [3] gpt2_paper.pdf, page 7               (score: 0.74)
+  [2] attention_is_all_you_need.pdf, page 6  (score: 0.81)
+  [3] bert_paper.pdf, page 2                 (score: 0.74)
 ```
 
 The scores represent cosine similarity on a 0-to-1 scale. A score of 1.0 is a mathematically perfect match. Scores above 0.5 are typically relevant to the question. Scores below 0.3 often represent noise — context that happened to share vocabulary without sharing meaning.
@@ -239,15 +246,17 @@ Two update modes are available. A full reindex drops the Qdrant collection entir
 
 To set up the automated daily sync, open your crontab:
 
-`crontab -e`
+```bash
+crontab -e
+```
 
 Add this line, replacing `/absolute/path/to/` with the actual absolute path to the repo on your machine:
 
 ```bash
-0 3 * * * /usr/bin/docker compose -f /absolute/path/to/docker/docker-compose.yml run --rm ingest python /app/scripts/ingest.py --sync >> /var/log/rag-sync.log 2>&1
+0 3 * * * /absolute/path/to/rag-llamaindex-qdrant-docker/scripts/sync-rag.sh >> /var/log/rag-sync.log 2>&1
 ```
 
-Cron does not inherit your normal shell `PATH`, so the command uses the absolute path to the `docker` binary. The `>> /var/log/rag-sync.log 2>&1` suffix appends both standard output and errors to a log file for later inspection.
+The wrapper script `sync-rag.sh` invokes `docker compose run --rm ingest python /app/scripts/ingest.py --sync` internally and resolves the path to the `docker` binary at runtime. Cron does not inherit your shell `PATH`, so the wrapper handles that detail in one place. The `>> /var/log/rag-sync.log 2>&1` suffix appends both standard output and errors to a log file for later inspection. Find the absolute path with `pwd` from inside the repo directory.
 
 After saving, verify the entry was accepted:
 
@@ -275,7 +284,7 @@ Some PDFs embed non-standard characters that Python cannot encode into UTF-8 met
 
 ### Don't want to run Docker?
 
-The Python scripts run natively without Docker if the dependencies are installed in a local virtual environment. Run `pip install -r docker/requirements.txt` inside a Python 3.12 virtual environment, then call the scripts directly with `python scripts/ingest.py` and `python scripts/query.py`.
+The Python scripts run natively without Docker if the dependencies are installed in a local virtual environment. Run `pip install -r docker/requirements.txt` inside a Python 3.12 virtual environment, then change `QDRANT_URL=http://qdrant:6333` to `QDRANT_URL=http://localhost:6333` in your `.env` (the `qdrant` hostname only resolves inside the Compose network), and call the scripts directly with `python scripts/ingest.py` and `python scripts/query.py`. You will also need a Qdrant instance running locally on port 6333 — start one with `docker compose -f docker/docker-compose.yml up -d qdrant` even when running the scripts on the host.
 
 For the full list and supported file formats, see [`docs/troubleshooting.md`](docs/troubleshooting.md).
 

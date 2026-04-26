@@ -5,11 +5,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1
 
 # System deps for PDF extraction (LlamaIndex SimpleDirectoryReader uses pypdf;
-# tesseract optional for scanned PDFs)
+# add tesseract-ocr + pytesseract here only if you want in-container OCR)
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         ca-certificates \
-        tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

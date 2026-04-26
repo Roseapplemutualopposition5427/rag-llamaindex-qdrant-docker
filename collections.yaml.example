@@ -1,0 +1,15 @@
+# Declare one entry per collection. Each entry creates a Qdrant collection
+# of the same name and reads files from documents/<name>/.
+#
+# chunk_size and chunk_overlap are measured in tokens.
+
+collections:
+  - name: research_papers
+    description: "arXiv PDFs and conference proceedings"
+    chunk_size: 512
+    chunk_overlap: 50
+
+  - name: notes
+    description: "Personal markdown notes"
+    chunk_size: 256
+    chunk_overlap: 25

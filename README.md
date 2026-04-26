@@ -547,7 +547,8 @@ The second improvement is the Model Context Protocol (MCP). MCP is an open stand
 
 Both extensions build directly on the Docker and LlamaIndex patterns from this post. No structural changes to the stack are required.
 
-- **Plain-text API key? Fix it → [Add Infisical for Secret Management](POST_2_URL)**
+- **Plain-text API key? Fix it with the Infisical CLI → [Add Infisical to Your Docker Stack with the CLI](https://github.com/bluedepin/infisical-cli-tutorial)**
+- **Or fetch secrets from Python → [Add Infisical to Your Python App with the SDK](https://github.com/bluedepin/infisical-sdk-tutorial)**
 - **Want agents to query this RAG directly? → [Add an MCP Server to Your RAG](POST_3_URL)**
 
 If you want a complete reference implementation with these exact files, see [github.com/\<your-handle\>/rag-llamaindex-qdrant-docker](https://github.com/bluedepin/rag-llamaindex-qdrant-docker). The repo mirrors this post step for step.

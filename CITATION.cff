@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use or reference this tutorial, please cite it as below."
+authors:
+  - family-names: Couto
+    given-names: Alec
+    orcid: ""
+title: "Build a RAG System with LlamaIndex and Qdrant in Docker"
+version: 1.0.0
+date-released: 2026-04-26
+url: "https://github.com/bluedepin/rag-llamaindex-qdrant-docker"
+license: MIT
+keywords:
+  - retrieval-augmented-generation
+  - llamaindex
+  - qdrant
+  - docker
+  - vector-database
+  - rag
+  - tutorial

